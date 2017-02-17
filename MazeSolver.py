@@ -1,7 +1,7 @@
 import math
 
 #filename = input("Enter filename (maze1.txt,maze2.txt,...,maze8.txt): ")
-filename = "maze3.txt"
+filename = "maze7.txt"
 
 #read maze into file and save the row width=====================
 maze = []
@@ -28,22 +28,22 @@ def printMaze():
     print("\n")
 
 def iup(index):
-    if index-colWidth < 0 or maze[index - colWidth] == '*':
+    if index-colWidth < 0 or maze[index - colWidth] == '*'or maze[index - colWidth] == 'p':
         return -1
     return index-colWidth
 
 def idwn(index):
-    if index+colWidth > maze.__len__()-1 or maze[index + colWidth] == '*':
+    if index+colWidth > maze.__len__()-1 or maze[index + colWidth] == '*' or maze[index + colWidth] == 'p':
         return -1
     return index+colWidth
 
 def ileft(index):
-    if index%colWidth == 0 or maze[index - 1] == '*':
+    if index%colWidth == 0 or maze[index - 1] == '*'or maze[index - 1] == 'p':
         return -1
     return index - 1
 
 def iright(index):
-    if index%colWidth == colWidth-1 or maze[index + 1] == '*':
+    if index%colWidth == colWidth-1 or maze[index + 1] == '*'or maze[index + 1] == 'p':
         return -1
     return index + 1
 
@@ -82,7 +82,7 @@ while deadEnd == True:
 step = 0
 sol = []
 sol.append(start)
-while step == 7:
+while sol[step] != end:
     nextStep = sol[step]
     cmpList = []
     if iright(nextStep) != -1:
@@ -94,16 +94,19 @@ while step == 7:
     if iup(nextStep) != -1:
         cmpList.append(iup(nextStep))
 
-    least = getDistance(sol[step],end)
+    least = getDistance(cmpList[0],end)
+    nextStep = cmpList[0]
     for index in cmpList:
         if least > getDistance(index,end):
             nextStep = index
 
-
+    cmpList.clear()
     if nextStep == sol[step]:
         break
 
     sol.append(nextStep)
+    if maze[nextStep]!= 'e':
+        maze[nextStep] ='p'
     step += 1
 
 for i in range(0,sol.__len__()):
