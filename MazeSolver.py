@@ -1,9 +1,9 @@
 import math
 
 #filename = input("Enter filename (maze1.txt,maze2.txt,...,maze8.txt): ")
-filename = "maze1.txt"
+filename = "maze3.txt"
 
-#read maze into file and save the row width
+#read maze into file and save the row width=====================
 maze = []
 k = 0
 with open(filename,'r') as fp:
@@ -19,7 +19,7 @@ with open(filename,'r') as fp:
                     end = k
                 k+=1
 
-
+#functions=============================================
 def printMaze():
     for i in range(0,maze.__len__()):
         print(maze[i], end="")
@@ -28,30 +28,86 @@ def printMaze():
     print("\n")
 
 def iup(index):
-    if index-colWidth < 0:
+    if index-colWidth < 0 or maze[index - colWidth] == '*':
         return -1
     return index-colWidth
+
 def idwn(index):
-    if index+colWidth > maze.__len__():
+    if index+colWidth > maze.__len__()-1 or maze[index + colWidth] == '*':
         return -1
     return index+colWidth
+
 def ileft(index):
-    if index%colWidth == 0:
+    if index%colWidth == 0 or maze[index - 1] == '*':
         return -1
     return index - 1
+
 def iright(index):
-    if index%colWidth == colWidth-1:
+    if index%colWidth == colWidth-1 or maze[index + 1] == '*':
         return -1
     return index + 1
+
 def getXY(index):
     coord = []
     coord.append(index % colWidth)
     coord.append(math.floor(index / colWidth))
 
     return coord
+
 def getDistance(num1, num2):
     n1 = getXY(num1)
     n2 = getXY(num2)
     return math.sqrt(math.pow((n1[0]-n2[0]),2)+math.pow((n1[1]-n2[1]),2))
+
+#clean up maze dead ends
+deadEnd = True
+while deadEnd == True:
+    deadEnd = False
+    for i in range(0, maze.__len__()):
+        paths = 0
+        if maze[i] =='.':
+            if iup(i) == -1:
+                paths +=1
+            if idwn(i) == -1:
+                paths +=1
+            if ileft(i) == -1:
+                paths +=1
+            if iright(i) == -1:
+                paths +=1
+            if paths == 3:
+                maze[i]='*'
+                deadEnd = True
+
+#A* solution
+step = 0
+sol = []
+sol.append(start)
+while step == 7:
+    nextStep = sol[step]
+    cmpList = []
+    if iright(nextStep) != -1:
+        cmpList.append(iright(nextStep))
+    if idwn(nextStep) != -1:
+        cmpList.append(idwn(nextStep))
+    if ileft(nextStep) != -1:
+        cmpList.append(ileft(nextStep))
+    if iup(nextStep) != -1:
+        cmpList.append(iup(nextStep))
+
+    least = getDistance(sol[step],end)
+    for index in cmpList:
+        if least > getDistance(index,end):
+            nextStep = index
+
+
+    if nextStep == sol[step]:
+        break
+
+    sol.append(nextStep)
+    step += 1
+
+for i in range(0,sol.__len__()):
+    print(sol[i])
+
 
 printMaze()
