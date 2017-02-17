@@ -1,7 +1,7 @@
 import math
 
 #filename = input("Enter filename (maze1.txt,maze2.txt,...,maze8.txt): ")
-filename = "maze7.txt"
+filename = "maze6.txt"
 
 #read maze into file and save the row width=====================
 maze = []
@@ -20,6 +20,7 @@ with open(filename,'r') as fp:
                 k+=1
 
 #functions=============================================
+
 def printMaze():
     for i in range(0,maze.__len__()):
         print(maze[i], end="")
@@ -27,23 +28,27 @@ def printMaze():
             print("\n", end="")
     print("\n")
 
+printMaze()
+
+c = {'p', '*'}
 def iup(index):
-    if index-colWidth < 0 or maze[index - colWidth] == '*'or maze[index - colWidth] == 'p':
+
+    if index-colWidth < 0 or (maze[index - colWidth] in c):
         return -1
     return index-colWidth
 
 def idwn(index):
-    if index+colWidth > maze.__len__()-1 or maze[index + colWidth] == '*' or maze[index + colWidth] == 'p':
+    if index+colWidth > maze.__len__()-1 or (maze[index + colWidth] in c):
         return -1
     return index+colWidth
 
 def ileft(index):
-    if index%colWidth == 0 or maze[index - 1] == '*'or maze[index - 1] == 'p':
+    if index%colWidth == 0 or (maze[index - 1] in c):
         return -1
     return index - 1
 
 def iright(index):
-    if index%colWidth == colWidth-1 or maze[index + 1] == '*'or maze[index + 1] == 'p':
+    if index%colWidth == colWidth-1 or (maze[index + 1] in c):
         return -1
     return index + 1
 
@@ -85,22 +90,27 @@ sol.append(start)
 while sol[step] != end:
     nextStep = sol[step]
     cmpList = []
-    if iright(nextStep) != -1:
+    if iright(nextStep) != -1 and maze[iright(nextStep)] != 's':
         cmpList.append(iright(nextStep))
-    if idwn(nextStep) != -1:
+
+    if idwn(nextStep) != -1 and maze[idwn(nextStep)] != 's':
         cmpList.append(idwn(nextStep))
-    if ileft(nextStep) != -1:
+
+    if ileft(nextStep) != -1 and maze[ileft(nextStep)] != 's':
         cmpList.append(ileft(nextStep))
-    if iup(nextStep) != -1:
+
+    if iup(nextStep) != -1 and maze[iup(nextStep)] != 's':
         cmpList.append(iup(nextStep))
 
-    least = getDistance(cmpList[0],end)
-    nextStep = cmpList[0]
-    for index in cmpList:
-        if least > getDistance(index,end):
-            nextStep = index
+    if cmpList.__len__():
+        least = getDistance(cmpList[0],end)
+        nextStep = cmpList[0]
+        for index in cmpList:
+            if least > getDistance(index,end):
+                nextStep = index
+    else:
+        nextStep = sol[step]
 
-    cmpList.clear()
     if nextStep == sol[step]:
         break
 
@@ -114,3 +124,5 @@ for i in range(0,sol.__len__()):
 
 
 printMaze()
+if start == sol.pop():
+    print("The maze is unsolvable")
