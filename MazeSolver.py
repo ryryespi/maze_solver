@@ -1,7 +1,8 @@
 import math
+import datetime
 
-#filename = input("Enter filename (maze1.txt,maze2.txt,...,maze8.txt): ")
-filename = "maze6.txt"
+filename = input("Enter filename (maze1.txt,maze2.txt,...,maze8.txt): \n")
+startingTime = datetime.datetime.now()
 
 #read maze into file and save the row width=====================
 maze = []
@@ -26,8 +27,9 @@ def printMaze():
         print(maze[i], end="")
         if (i+1)%colWidth==0:
             print("\n", end="")
-    print("\n")
+    print("\n", end="")
 
+print("ORIGINAL MAZE")
 printMaze()
 
 c = {'p', '*'}
@@ -110,19 +112,32 @@ while sol[step] != end:
                 nextStep = index
     else:
         nextStep = sol[step]
-
-    if nextStep == sol[step]:
+    if nextStep == start:
         break
 
-    sol.append(nextStep)
-    if maze[nextStep]!= 'e':
-        maze[nextStep] ='p'
-    step += 1
+    if nextStep == sol[step]:
+        maze[nextStep]='*'
+        sol.pop()
+        step-=1
+    else:
+        sol.append(nextStep)
+        if maze[nextStep]!= 'e':
+            maze[nextStep] ='p'
+        step += 1
 
-for i in range(0,sol.__len__()):
-    print(sol[i])
+endingTime = datetime.datetime.now()
 
 
+print("SOLVED MAZE")
 printMaze()
+print("Maze solved in ", endingTime-startingTime," milliseconds \n")
+
 if start == sol.pop():
     print("The maze is unsolvable")
+
+if input("list all elements in solution?[y,n]: ").lower() == 'y':
+    for i in range(0,sol.__len__()):
+        coord = getXY(sol[i])
+        print("[",coord[0],",",coord[1],"]")
+
+
