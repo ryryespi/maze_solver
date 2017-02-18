@@ -2,7 +2,7 @@ import math
 import datetime
 
 filename = input("Enter filename (maze1.txt,maze2.txt,...,maze8.txt): \n")
-startingTime = datetime.datetime.now()
+
 
 #read maze into file and save the row width=====================
 maze = []
@@ -31,6 +31,8 @@ def printMaze():
 
 print("ORIGINAL MAZE")
 printMaze()
+
+startingTime = datetime.datetime.now()
 
 c = {'p', '*'}
 def iup(index):
@@ -130,7 +132,7 @@ endingTime = datetime.datetime.now()
 
 print("SOLVED MAZE")
 printMaze()
-print("Maze solved in ", endingTime-startingTime," milliseconds \n")
+print("Maze solved in ", (endingTime-startingTime).microseconds," microseconds \n")
 
 if start == sol.pop():
     print("The maze is unsolvable")
