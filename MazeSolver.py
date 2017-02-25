@@ -75,8 +75,8 @@ for i in files:
             n2 = getXY(num2)
             return math.sqrt(math.pow((n1[0]-n2[0]),2)+math.pow((n1[1]-n2[1]),2))
 
-        #clean up maze dead ends
-        deadEnd = True
+        # #clean up maze dead ends
+        # deadEnd = True
         # while deadEnd == True:
         #     deadEnd = False
         #     for i in range(0, maze.__len__()):
